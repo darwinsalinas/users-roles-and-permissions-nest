@@ -1,6 +1,10 @@
 import { differenceInCalendarYears, differenceInYears, intervalToDuration, parse } from 'date-fns';
 import { Entity, Column, PrimaryGeneratedColumn, AfterLoad, Unique } from 'typeorm';
 
+export enum Gender {
+    MALE = 'male',
+    FEMALE = 'female'
+}
 @Entity({ schema: 'public', name: 'users' })
 export class User {
     public age: number;
@@ -20,8 +24,8 @@ export class User {
     @Column({ type: 'date' })
     date_of_birth: string
 
-    @Column({ type: 'varchar' })
-    gender: string
+    @Column({ type: 'enum', enum: Gender })
+    gender: Gender
 
     @Column({ type: 'varchar', length: 50 })
     dni: string
