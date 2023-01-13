@@ -5,18 +5,25 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'api-appyweb-db',
-      entities: [User],
-      synchronize: false,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule.forRoot()],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        return {
+          type: 'postgres',
+          host: configService.get('POSTGRES_DB'),
+          port: 5432,
+          username: configService.get('POSTGRES_USER'),
+          password: configService.get('POSTGRES_PASSWORD'),
+          database: configService.get('POSTGRES_DB'),
+          entities: [User],
+          synchronize: true,
+        }
+      }
     }),
     UsersModule
   ],
