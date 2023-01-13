@@ -1,5 +1,5 @@
 import { differenceInCalendarYears, differenceInYears, intervalToDuration, parse } from 'date-fns';
-import { Entity, Column, PrimaryGeneratedColumn, AfterLoad } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, AfterLoad, Unique } from 'typeorm';
 
 @Entity({ schema: 'public', name: 'users' })
 export class User {
@@ -11,7 +11,7 @@ export class User {
     @Column()
     name: string;
 
-    @Column()
+    @Column({ unique: true })
     email: string;
 
     @Column({ select: false })
