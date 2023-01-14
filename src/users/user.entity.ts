@@ -1,5 +1,7 @@
 import { differenceInCalendarYears, differenceInYears, intervalToDuration, parse } from 'date-fns';
-import { Entity, Column, PrimaryGeneratedColumn, AfterLoad, Unique } from 'typeorm';
+import { Role } from 'src/roles/entities/role.entity';
+import { Entity, Column, PrimaryGeneratedColumn, AfterLoad, Unique, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import { UsersRoles } from '../roles/entities/users-roles.entity';
 
 export enum Gender {
     MALE = 'male',
@@ -38,6 +40,9 @@ export class User {
 
     @Column({ type: 'varchar', length: 50 })
     phone_number: string
+
+    @OneToMany(() => UsersRoles, usersRoles => usersRoles.user)
+    usersRoles: UsersRoles[]
 
     @AfterLoad()
     calculateAge() {

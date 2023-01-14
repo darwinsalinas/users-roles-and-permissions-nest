@@ -31,21 +31,21 @@ export class UsersService {
         if (userWithEmailExists) {
             throw new BadRequestException('Email already registered')
         }
-        const user = await this.usersRepository.save(data);
+
+        const savedUser = await this.usersRepository.save(data);
+
+        const user = await this.usersRepository.findOneBy({ id: savedUser.id });
 
         return user;
     }
 
     async update(id: number, data: UpdateUserDto) {
-        const user = await this.usersRepository.findOneBy({ id });
+        const user = await this.findOne(id);
 
-        if (!user) {
-            throw new NotFoundException(`User with id ${id} not found`);
-        }
+        await this.usersRepository.merge(user, data);
+        await this.usersRepository.save(user);
 
-        const updated = await this.usersRepository.merge(user, data);
-
-        return updated;
+        return user;
     }
 
     async destroy(id: number) {

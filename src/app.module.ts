@@ -6,6 +6,9 @@ import { AppService } from './app.service';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { RolesModule } from './roles/roles.module';
+import { Role } from './roles/entities/role.entity';
+import { UsersRoles } from './roles/entities/users-roles.entity';
 
 @Module({
   imports: [
@@ -20,12 +23,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           username: configService.get('POSTGRES_USER'),
           password: configService.get('POSTGRES_PASSWORD'),
           database: configService.get('POSTGRES_DB'),
-          entities: [User],
+          entities: [User, Role, UsersRoles],
           synchronize: true,
         }
       }
     }),
-    UsersModule
+    UsersModule,
+    RolesModule
   ],
   controllers: [AppController],
   providers: [AppService],
